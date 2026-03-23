@@ -4,13 +4,27 @@ import { termsPageStyles } from '@/features/terms/ui/termsPageStyles';
 
 interface TermItemProps {
   term: Term;
+  checked: boolean;
+  onToggle: () => void;
 }
 
-export default function TermItem({ term }: TermItemProps) {
+export default function TermItem({ term, checked, onToggle }: TermItemProps) {
   return (
     <div className={termsPageStyles.termItem}>
       <div className={termsPageStyles.termLeft}>
-        <span className={termsPageStyles.termTitle}>{term.title}</span>
+        <input
+          type="checkbox"
+          id={`term-${term.type}`}
+          checked={checked}
+          onChange={onToggle}
+          className={termsPageStyles.checkbox}
+        />
+        <label
+          htmlFor={`term-${term.type}`}
+          className={termsPageStyles.termTitle}
+        >
+          {term.title}
+        </label>
       </div>
       <div className={termsPageStyles.termRight}>
         <span
