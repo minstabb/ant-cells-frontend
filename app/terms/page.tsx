@@ -11,7 +11,7 @@ import { useTermConsent } from '@/features/terms/application/hooks/useTermConsen
 export default function TermsPage() {
   const authState = useAtomValue(authAtom);
   const router = useRouter();
-  const { areAllRequiredChecked } = useTermConsent(false);
+  const { areAllRequiredChecked, acceptTerms } = useTermConsent(false);
 
   useEffect(() => {
     if (authState.status !== 'LOADING' && authState.status !== 'TEMPORARY_AUTH') {
@@ -35,6 +35,10 @@ export default function TermsPage() {
               ? termsPageStyles.submitButton
               : termsPageStyles.submitButtonDisabled
           }
+          onClick={() => {
+            acceptTerms();
+            router.push('/account/signup');
+          }}
         >
           동의하고 시작하기
         </button>

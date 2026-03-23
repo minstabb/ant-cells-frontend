@@ -1,13 +1,15 @@
 'use client';
 
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { useCallback } from 'react';
 import { TermType } from '@/features/terms/domain/model/term';
 import { termConsentAtom } from '@/features/terms/application/atoms/termConsentAtom';
+import { acceptedTermsAtom } from '@/features/terms/application/atoms/acceptedTermsAtom';
 import { getVisibleTerms } from '@/features/terms/application/queries/termQuery';
 
 export function useTermConsent(showConditionalTerms: boolean) {
   const [checkedTypes, setCheckedTypes] = useAtom(termConsentAtom);
+  const setAcceptedTerms = useSetAtom(acceptedTermsAtom);
   const visibleTerms = getVisibleTerms(showConditionalTerms);
   const requiredTerms = visibleTerms.filter((t) => t.requirement === 'REQUIRED');
 
@@ -34,5 +36,9 @@ export function useTermConsent(showConditionalTerms: boolean) {
     }
   }, [isAllChecked, visibleTerms, setCheckedTypes]);
 
-  return { checkedTypes, visibleTerms, isAllChecked, areAllRequiredChecked, toggle, toggleAll };
+  const acceptTerms = useCallback(() => {
+    setAcceptedTerms(Array.from(checkedTypes));
+  }, [checkedTypes, setAcceptedTerms]);
+
+  return { checkedTypes, visibleTerms, isAllChecked, areAllRequiredChecked, toggle, toggleAll, acceptTerms };
 }
